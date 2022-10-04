@@ -17,6 +17,7 @@ export default function Home() {
     // if (authToken !== null) {
     //   navigate("/recepies");
     // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div>
