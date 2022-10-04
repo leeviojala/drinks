@@ -1,6 +1,4 @@
 import {
-  Grid,
-  Paper,
   TextField,
   Button,
   Card,
@@ -8,15 +6,9 @@ import {
   Box,
   CardHeader,
 } from "@mui/material";
-import { Container, Stack } from "@mui/system";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+import { Stack } from "@mui/system";
 
 import React from "react";
-import firebase from "../firebase";
 
 export default function Login({ title, setPassword, setEmail, handleAction }) {
   return (
