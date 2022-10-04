@@ -22,9 +22,9 @@ function App() {
   // useEffect(() => {
   //   let authToken = sessionStorage.getItem("Auth token");
 
-  //   if (authToken !== null) {
-  //     navigate("/recepies");
-  //   }
+  //   // if (authToken !== null) {
+  //   //   navigate("/recepies");
+  //   // }
   // }, []);
 
   const handleAction = (id) => {
