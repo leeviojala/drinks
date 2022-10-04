@@ -1,24 +1,104 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import Login from "./components/Login";
+import { Container } from "@mui/system";
+import { Box, Button, Snackbar } from "@mui/material";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import React from "react";
+import Home from "./components/Home";
+import fb from "./firebase";
+import Drink from "./components/Drink";
 
 function App() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  // useEffect(() => {
+  //   let authToken = sessionStorage.getItem("Auth token");
+
+  //   if (authToken !== null) {
+  //     navigate("/recepies");
+  //   }
+  // }, []);
+
+  const handleAction = (id) => {
+    const autentication = getAuth();
+    if (id === 1) {
+      signInWithEmailAndPassword(autentication, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          sessionStorage.setItem("Auth token", user.uid);
+          navigate("/recepies");
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorMessage);
+          setOpen(true);
+        });
+    }
+    if (id === 2) {
+      createUserWithEmailAndPassword(autentication, email, password).then(
+        (res) => {
+          console.log(res);
+          navigate("/recepies");
+          sessionStorage.setItem("Auth token", res._tokenResponse.refreshToken);
+        }
+      );
+    }
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            <Login
+              title={"login"}
+              setEmail={setEmail}
+              setPassword={setPassword}
+              handleAction={() => handleAction(1)}
+              sx={{ maxWidth: 300 }}
+            ></Login>
+          }
+        />
+        <Route
+          path="/Register"
+          element={
+            <Login
+              title={"register"}
+              setEmail={setEmail}
+              setPassword={setPassword}
+              handleAction={() => handleAction(2)}
+              sx={{ maxWidth: 300 }}
+            ></Login>
+          }
+        />
+        <Route path="/recepies" element={<Home></Home>}></Route>
+        <Route path="/recepies/:id" element={<Drink></Drink>}></Route>
+      </Routes>
+      <Snackbar
+        open={open}
+        autoHideDuration={5000}
+        message={errorMessage}
+        onClose={() => setOpen(false)}
+      ></Snackbar>
+    </Container>
   );
 }
 
