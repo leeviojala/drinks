@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import fb from "../firebase";
 import { doc, getFirestore } from "firebase/firestore";
 import { useParams } from "react-router-dom";
@@ -19,14 +19,23 @@ import {
 
 export default function Drink() {
   const navigate = useNavigate();
+  const [visible, setVisible] = React.useState(false);
   let { id } = useParams();
   console.log(id);
   const firestore = getFirestore(fb);
-  const [value, loading, error] = useDocument(doc(firestore, "drinks", id), {});
+  const [value, loading] = useDocument(doc(firestore, "drinks", id), {});
+  useEffect(() => {
+    setVisible(true);
+
+    return () => {
+      setVisible(false);
+    };
+  }, []);
+
   //LAITA URLIIN ID JA HAE TÄSTÄ TIEDOT
   loading ? console.log("loading") : console.log(value.data());
   return !loading ? (
-    <Slide direction="right" in={value} mountOnEnter unmountOnExit>
+    <Slide direction="right" in={visible} mountOnEnter unmountOnExit>
       <div>
         <IconButton onClick={() => navigate("/recepies")}>
           <ArrowBackIcon></ArrowBackIcon>
@@ -43,7 +52,7 @@ export default function Drink() {
             <List>
               {value.data().ingredients.map((ingredient) => {
                 return (
-                  <ListItem>
+                  <ListItem key={ingredient.ingredientName}>
                     <ListItemText
                       primary={ingredient.ingredientName}
                       secondary={ingredient.ingredientAmount}

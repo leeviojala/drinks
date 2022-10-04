@@ -9,15 +9,14 @@ import {
   ListItemAvatar,
   ListItemText,
 } from "@mui/material";
-import { Navigate, Route, useMatch, useNavigate } from "react-router-dom";
-import Drink from "./Drink";
+import { useNavigate } from "react-router-dom";
 
 export default function Recepies() {
   let navigate = useNavigate();
   const firestore = getFirestore(fb);
   const recepiesRef = collection(firestore, "drinks");
   const query = recepiesRef;
-  const [recepies, loading, error] = useCollection(query, {});
+  const [recepies, loading] = useCollection(query, {});
   if (!loading) {
     console.log(recepies.docs.map((doc) => doc.data()));
   }

@@ -1,15 +1,9 @@
-import logo from "./logo.svg";
 import "./App.css";
 import Login from "./components/Login";
 import { Container } from "@mui/system";
-import { Box, Button, Snackbar } from "@mui/material";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Snackbar } from "@mui/material";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -17,7 +11,6 @@ import {
 } from "firebase/auth";
 import React from "react";
 import Home from "./components/Home";
-import fb from "./firebase";
 import Drink from "./components/Drink";
 
 function App() {
@@ -46,7 +39,6 @@ function App() {
           // ...
         })
         .catch((error) => {
-          const errorCode = error.code;
           const errorMessage = error.message;
           setErrorMessage(errorMessage);
           setOpen(true);
